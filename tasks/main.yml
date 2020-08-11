@@ -1,0 +1,28 @@
+---
+# tasks file for ansible_role_linux_install_jenkins
+
+- name: renable epel repository
+  command: "wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo"
+
+- name: key
+  command: "rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key"
+
+- name: install jenkins
+  yum:
+    name: jenkins
+    state: installed
+
+- name: start jenkin
+  service:
+    name: jenkins
+    state: started
+
+- name: find jenkins server password
+  command: cat /var/lib/jenkins/secrets/initialAdminPassword
+  register: output
+
+- name: print output
+  debug:
+    var: output
+
+
